@@ -4,7 +4,7 @@ class Settings(BaseSettings):
     """Application configuration"""
 
     #Database
-    database_url: str = "postgresql+asyncpg://neondb_owner:npg_Hi4bdNPXxt3a@ep-bitter-math-am2upr46-pooler.c-5.us-east-1.aws.neon.tech/neondb?ssl=require"
+    database_url: str = ""
 
     #REDIS
     redis_url: str = ""
