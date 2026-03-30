@@ -2,4 +2,40 @@ version: '3.9'
 
 services:
   rabbitmq:
-    image: rabb
+    image: rabbitmq:management-alpine
+    container_name: chronosdb-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: chronos
+      RABBITMQ_DEFAULT_PASS: chronos_secret
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ==========================================
+  # CACHE (Redis)
+  # ==========================================
+  redis:
+    image: redis:8-alpine
+    container_name: chronosdb-redis
+    command: redis-server --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  # postgres_data:  # Uncomment if using local PostgreSQL
+  rabbitmq_data:
+  redis_data:
